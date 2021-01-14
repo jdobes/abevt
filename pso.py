@@ -44,6 +44,7 @@ class Swarm:
         return all([x >= self.bounds[0] and x <= self.bounds[1] for x in pos])
 
     def simulate(self):
+        costs_history = []
         w = self.wstart
         # Works only for fes % particles_count == 0
         iterations = int(self.fes / self.particles_count)
@@ -64,8 +65,9 @@ class Swarm:
                     if cost < self.cost_best:
                         self.cost_best = cost
                         self.position_best = particle.position.copy()
+                costs_history.append(self.cost_best)
             w -= w_diff
             #print(f"New w: {w}")
             #print(f"Iteration: {_}, Best cost: {self.cost_best}, Best position: {self.position_best}")
         #print(f"Best cost: {self.cost_best}, Best position: {self.position_best}")
-        return self.cost_best, self.position_best
+        return self.cost_best, self.position_best, costs_history
