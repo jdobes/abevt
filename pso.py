@@ -11,8 +11,10 @@ class Particle:
 
 
 class Swarm:
-    def __init__(self, cost_function = None, dimensions: int = 10):
-        self.bounds = [-10,10]
+    def __init__(self, bounds = None, cost_function = None, dimensions = 10):
+        if not bounds:
+            raise ValueError("Missing bounds!")
+        self.bounds = bounds
         self.c1 = self.c2 = 2.0
         self.wstart = 0.9
         self.wend = 0.4
@@ -54,6 +56,7 @@ class Swarm:
                 if not self.is_in_bounds(particle.position):
                     #print("Particle out of bounds!")
                     particle.position = self.random_position()
+                    particle.velocity = np.zeros(self.dimensions)
                 cost = self.cost_function(particle.position)
                 if cost < particle.cost_best:
                     particle.cost_best = cost
@@ -64,4 +67,5 @@ class Swarm:
             w -= w_diff
             #print(f"New w: {w}")
             #print(f"Iteration: {_}, Best cost: {self.cost_best}, Best position: {self.position_best}")
-        print(f"Best cost: {self.cost_best}, Best position: {self.position_best}")
+        #print(f"Best cost: {self.cost_best}, Best position: {self.position_best}")
+        return self.cost_best, self.position_best
