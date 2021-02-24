@@ -69,10 +69,10 @@ int main()
 			csv.push_back(run(dimensionSize, funkce, BOUNDARY));
 		}
 #ifdef SOMA
-		makeCSVfile("SOMA" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
+		makeCSVfile("reference_output/SOMA" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
 #endif // SOMA
 #ifdef JDE
-		makeCSVfile("JDE" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
+		makeCSVfile("reference_output/JDE" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
 #endif // JDE
 
 
@@ -86,10 +86,10 @@ int main()
 			csv.push_back(run(dimensionSize, funkce, BOUNDARY));
 		}
 #ifdef SOMA
-		makeCSVfile("SOMA" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
+		makeCSVfile("reference_output/SOMA" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
 #endif // SOMA
 #ifdef JDE
-		makeCSVfile("JDE" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
+		makeCSVfile("reference_output/JDE" + names[funkce - 1] + to_string(dimensionSize) + "d", csv);
 #endif // JDE
 
 
