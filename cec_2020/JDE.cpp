@@ -1,5 +1,6 @@
 ﻿#include <stdlib.h>
 #include <vector>
+#include <cstring>
 using namespace std;
 
 struct jedinec
@@ -56,9 +57,8 @@ inline vector<jedinec> get3blbecky(vector<jedinec> populace, jedinec jed) {
 
 void cec20_test_func(double*, double*, int, int, int);
 
-vector<result> run(int dimension, int testFunction, int boundary);
-
-inline vector<result> run(int dimension, int testFunction, int boundary) {
+extern "C" {
+int run(int dimension, int testFunction, int boundary, result* data) {
 
 	int d = dimension;
 	int P = 50; //teď už je to OK
@@ -177,6 +177,8 @@ inline vector<result> run(int dimension, int testFunction, int boundary) {
 
 	}
 
-	return bestResults;
+	std::memcpy(data, bestResults.data(), bestResults.size() * sizeof(result));
+    return bestResults.size();
 
+}
 }

@@ -1,6 +1,7 @@
 ﻿#include <vector>
 #include <iostream>
 #include <random>
+#include <cstring>
 
 using namespace std;
 
@@ -17,12 +18,11 @@ struct ohodnocenaPopulace
     vector<jedinec> populace;
 };
 
-struct result
+typedef struct
 {
     int fez;
     double cost;
-};
-
+} result;
 
 void cec20_test_func(double*, double*, int, int, int);
 
@@ -99,12 +99,10 @@ inline vector<double> vec_multiply_with_vector(vector<double> first, vector<doub
     return result;
 }
 
-vector<result> run(int dimension, int testFunction, int boundary);
 
-
+extern "C" {
 //nedojede do 50k, protože je omezeny migracemi - šenky říkal že to do konce nedojde
-inline vector<result> run(int dimension, int testFunction, int boundary) {
-    
+int run(int dimension, int testFunction, int boundary, result* data) {
     vector<result> best_results;
     double t = 0;
     int path_length = 3;
@@ -211,6 +209,8 @@ inline vector<result> run(int dimension, int testFunction, int boundary) {
         }
 
     }
-   
-    return best_results;
+
+    std::memcpy(data, best_results.data(), best_results.size() * sizeof(result));
+    return best_results.size();
+}
 }
