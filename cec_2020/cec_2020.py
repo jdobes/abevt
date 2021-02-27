@@ -1,46 +1,45 @@
 #!/usr/bin/env python3
 
-from ctypes import CDLL, POINTER, Structure, c_int, c_double, Array
+from ctypes import CDLL, POINTER, c_int, c_double
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
-SOMA_SO_LIB = "./SOMA.so"
-JDE_SO_LIB = "./JDE.so"
+import jde
+import soma
+
+CEC20_SO_LIB = "./cec20_test_func.so"
 
 DIMENSIONS = [10, 20]
-BOUNDS = 100
+BOUNDS = [-100, 100]
 RUNS = 30
 
 FUNCTIONS = {
     1: "bent_cigar", # 100
-    2: "schwefel", # 1100
-    3: "lunacek_bi_rastrigin", # 700
-    4: "rosenbrock_griewangk", # 1900
-    5: "hybrid_one", # 1700
-    6: "hybrid_two", # 1600
-    7: "hybrid_three", # 2100
-    8: "composition_one", # 2200
-    9: "composition_two", # 2400
-    10: "composition_three" # 2500
+#    2: "schwefel", # 1100
+#    3: "lunacek_bi_rastrigin", # 700
+#    4: "rosenbrock_griewangk", # 1900
+#    5: "hybrid_one", # 1700
+#    6: "hybrid_two", # 1600
+#    7: "hybrid_three", # 2100
+#    8: "composition_one", # 2200
+#    9: "composition_two", # 2400
+#    10: "composition_three" # 2500
 }
 
 OUTPUT_DIR = "output/"
 
-class Result(Structure):
-    _fields_ = [
-       ("fez", c_int),
-       ("cost", c_double)]
-
 
 def main():
-    soma = CDLL(SOMA_SO_LIB)
-    soma.run.argtypes = [c_int, c_int, c_int, POINTER(Result)]
-    soma.run.restype = c_int
-    jde = CDLL(JDE_SO_LIB)
-    jde.run.argtypes = [c_int, c_int, c_int, POINTER(Result)]
-    jde.run.restype = c_int
+    # Define C library interface
+    cec20 = CDLL(CEC20_SO_LIB)
+    cec20.cec20_test_func.argtypes = [POINTER(c_double), POINTER(c_double), c_int, c_int, c_int]
+    cec20.cec20_test_func.restype = None
 
-    algos = {"soma": soma, "jde": jde}
+    # Alias for C function
+    cost_function = cec20.cec20_test_func
+
+    algos = {"soma": soma}#, "jde": jde}
 
     # Evaluate test functions using SOMA and jDE
     global_results = {x: {y: {} for y in DIMENSIONS} for x in FUNCTIONS}
@@ -50,14 +49,15 @@ def main():
                 print(f"Starting evaluation of {algo_name}_F{func_id}_{FUNCTIONS[func_id]}_{dimension}d.")
                 all_run_results = []
                 for i in range(RUNS):
-                    result_buff = (Result * 200000)()
-                    result_length = algo_lib.run(dimension, func_id, BOUNDS, result_buff)
-                    result_buff = result_buff[:result_length]
-                    for idx, res in enumerate(result_buff):
+                    best_results = algo_lib.run(cost_function, func_id, dimension, BOUNDS)
+                    #print(len(best_results))
+                    for idx, res in enumerate(best_results):
                         if idx >= len(all_run_results):
                             all_run_results.append([])
-                        all_run_results[idx].append(np.double(res.cost))
-                    print(f"Run {i+1}/{RUNS} completed.")
+                        all_run_results[idx].append(res)
+                    sys.stdout.write(f"\rRun {i+1}/{RUNS} completed.")
+                    sys.stdout.flush()
+                print("")
                 average_run_results = []
                 for run_result in all_run_results:
                     average_run_result = np.mean(run_result)

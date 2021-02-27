@@ -71,10 +71,9 @@ void cf_cal(double *, double *, int, double *,double *,double *,double *,int);
 double *OShift,*M,*y,*z,*x_bound;
 int ini_flag,n_flag,func_flag,*SS;
 
-
+extern "C" {
 void cec20_test_func(double *x, double *f, int nx, int mx,int func_num0)
 {
-
     int cf_num=10,i,j,func_num;
     int Func_num[]={1,2,3,7,4,16,6,22,24,25};
     if (func_num0<1||func_num0>10)
@@ -365,6 +364,7 @@ void cec20_test_func(double *x, double *f, int nx, int mx,int func_num0)
 
     }
 
+}
 }
 
 void sphere_func (double *x, double *f, int nx, double *Os, double *Mr, int s_flag, int r_flag) /* Sphere */
