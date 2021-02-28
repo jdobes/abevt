@@ -2,7 +2,6 @@ from ctypes import POINTER, c_double, byref
 import numpy as np
 
 FES_MULTIPLICATOR = 5000
-MIGRATIONS = 100
 PATH_LENGTH = 3
 POP_SIZE = 50
 PRT = 0.3
@@ -57,7 +56,9 @@ def run(cost_function, function_id, dimension, bounds):
     fes = 0
     best_fitnesses = []
 
-    for _ in range(MIGRATIONS):
+    while True:
+        if fes >= max_fes: # check fes
+            break
         last_gen_leader = leader
         for individual in population:
             if fes >= max_fes: # check fes

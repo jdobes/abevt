@@ -16,18 +16,18 @@ RUNS = 30
 
 FUNCTIONS = {
     1: "bent_cigar", # 100
-#    2: "schwefel", # 1100
-#    3: "lunacek_bi_rastrigin", # 700
-#    4: "rosenbrock_griewangk", # 1900
-#    5: "hybrid_one", # 1700
-#    6: "hybrid_two", # 1600
-#    7: "hybrid_three", # 2100
-#    8: "composition_one", # 2200
-#    9: "composition_two", # 2400
-#    10: "composition_three" # 2500
+    2: "schwefel", # 1100
+    3: "lunacek_bi_rastrigin", # 700
+    4: "rosenbrock_griewangk", # 1900
+    5: "hybrid_one", # 1700
+    6: "hybrid_two", # 1600
+    7: "hybrid_three", # 2100
+    8: "composition_one", # 2200
+    9: "composition_two", # 2400
+    10: "composition_three" # 2500
 }
 
-OUTPUT_DIR = "output/"
+OUTPUT_DIR = "graphs/"
 
 
 def main():
