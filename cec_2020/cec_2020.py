@@ -39,7 +39,7 @@ def main():
     # Alias for C function
     cost_function = cec20.cec20_test_func
 
-    algos = {"soma": soma}#, "jde": jde}
+    algos = {"jde": jde, "soma": soma}
 
     # Evaluate test functions using SOMA and jDE
     global_results = {x: {y: {} for y in DIMENSIONS} for x in FUNCTIONS}
@@ -48,15 +48,17 @@ def main():
             for algo_name, algo_lib in algos.items():
                 print(f"Starting evaluation of {algo_name}_F{func_id}_{FUNCTIONS[func_id]}_{dimension}d.")
                 all_run_results = []
+                best_run_results = []
                 for i in range(RUNS):
                     best_results = algo_lib.run(cost_function, func_id, dimension, BOUNDS)
-                    #print(len(best_results))
                     for idx, res in enumerate(best_results):
                         if idx >= len(all_run_results):
                             all_run_results.append([])
                         all_run_results[idx].append(res)
                     sys.stdout.write(f"\rRun {i+1}/{RUNS} completed.")
                     sys.stdout.flush()
+                    best_run_result = np.min(best_results)
+                    best_run_results.append(best_run_result)
                 print("")
                 average_run_results = []
                 for run_result in all_run_results:
@@ -64,11 +66,11 @@ def main():
                     average_run_results.append(average_run_result)
                 global_results[func_id][dimension][algo_name] = average_run_results
 
-                minimum = np.min(average_run_results)
-                maximum = np.max(average_run_results)
-                mean = np.mean(average_run_results)
-                median = np.median(average_run_results)
-                stddev = np.std(average_run_results)
+                minimum = np.min(best_run_results)
+                maximum = np.max(best_run_results)
+                mean = np.mean(best_run_results)
+                median = np.median(best_run_results)
+                stddev = np.std(best_run_results)
                 print(f"Evaluation of {algo_name}_F{func_id}_{FUNCTIONS[func_id]}_{dimension}d finished, min={minimum}, max={maximum}, mean={mean}, median={median}, stddev={stddev}")
 
     # Plot graphs
