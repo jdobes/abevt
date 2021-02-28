@@ -5,6 +5,6 @@ Spusteni na Linuxu:
 
     python3 cec_2020.py
 
-- Vygenerovane grafy se nachazi v adresari output/ a statistiky jsou vypsany na standardnim vystup
+- Vygenerovane grafy se nachazi v adresari graphs/ a statistiky jsou vypsany na standardnim vystup
 - report.ods obsahuje statistiky z jednoho spusteni programu
 
